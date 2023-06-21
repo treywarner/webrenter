@@ -4,60 +4,48 @@
 
 <h2 class="my-4">Project <%= @url %>></h2>
 
-<div class='row my-5'>
-  <ol class='list-group list-group-horizontal flex-wrap col-md-12'>
-    <!--<% @project_conts.each do |dir| %>
-    <li class='list-group-item btn btn-outline-dark m-3 border'>
-      <div>
-        <a href='<%= url("/projects/#{@url}/#{dir}") %>' class="text-center">
-          <i class='fas fa-fw fa-camera fa-5x '></i>
-          <p><%= #dir.gsub('_', ' ') 
-            %><p/>
-        </a>
-      </div>
-    </li>
-    <% end %>--->
-
-    <table class="table table-striped table-condensed w-100 no-footer">
-      <thead>
-        
-        <tr><th rowspan="1" colspan="1"></th><th>Type</th><th>Name</th><th>Actions</span></th><th>Size</th><th>Modified at</th></tr>
-      </thead>
-      <tbody>
-        <% @project_conts.each do |dir| %>
-
-        <tr>
-          <td>
-            <input type="checkbox">
-          </td>
-          <td>
-            <span class="fa <%= Pathname("#{@dir}/#{dir}").directory? ? "fa-folder" : "fa-file"%>" style="color: lightgrey"></span>
-          </td>
-          <td>
-            <a href='<%= url("projects/#{@url}/#{dir}") %>'><%=dir.gsub('_', ' ')%>
-            </a>
-          </td>
-          <td>
-            <div class="btn-group actions-btn-group">
-              <button type="button" class="actions-btn btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="fa fa-ellipsis-v"></span>
-              </button>
-              <ul class="dropdown-menu">
-                  <li><a href='<%= url("view/#{@url}/#{dir}") %>' class="dropdown-item" data-row-index="2"><i class="fas fa-eye"></i> View</a></li>
-                  <li><a href='<%= url("editor/#{@url}/#{dir}") %>' class="dropdown-item" data-row-index="2"><i class="fas fa-edit"></i> Edit</a></li>
-                <li><a href="#" class="rename-file dropdown-item" data-row-index="2"><i class="fas fa-font"></i> Rename</a></li>
-                <li><a href="" class="download-file dropdown-item" data-row-index="2"><i class="fas fa-download"></i> Download</a></li>
-                <li class="dropdown-divider mt-4"></li>
-                <li><a href="#" class="dropdown-item text-danger" data-row-index="2"><i class="fas fa-trash"></i> Delete</a></li>
-              </ul>
-            </div>
-          </td>
-          <td><%=File.size("#{@dir}/#{dir}")%> Bytes</td>
-          <td><%=File.mtime("#{@dir}/#{dir}")%></td>
-        </tr>
-
-      </tbody>
-<% end %>
-    </table>
-  </ol>
+<div class='row my-3'>
+  <button class="btn btn-secondary btn-sm">Project Settings</button>
 </div>
+
+<table class="table table-striped table-condensed w-100 no-footer">
+  <thead>
+    
+    <tr><th rowspan="1" colspan="1"></th><th>Type</th><th>Name</th><th>Actions</span></th><th>Size</th><th>Modified at</th></tr>
+  </thead>
+  <tbody>
+    <% @project_conts.each do |dir| %>
+
+    <tr>
+      <td>
+        <input type="checkbox">
+      </td>
+      <td>
+        <span class="fa <%= Pathname("#{@dir}/#{dir}").directory? ? "fa-folder" : "fa-file"%>" style="color: lightgrey"></span>
+      </td>
+      <td>
+        <a href='<%= url("projects/#{@url}/#{dir}") %>'><%=dir.gsub('_', ' ')%>
+        </a>
+      </td>
+      <td>
+        <div class="btn-group actions-btn-group">
+          <button type="button" class="actions-btn btn btn-outline-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="fa fa-ellipsis-v"></span>
+          </button>
+          <ul class="dropdown-menu">
+              <li><a href='<%= url("view/#{@url}/#{dir}") %>' class="dropdown-item" data-row-index="2"><i class="fas fa-eye"></i> View</a></li>
+              <li><a href='<%= url("editor/#{@url}/#{dir}") %>' class="dropdown-item" data-row-index="2"><i class="fas fa-edit"></i> Edit</a></li>
+            <li><a href="#" class="rename-file dropdown-item" data-row-index="2"><i class="fas fa-font"></i> Rename</a></li>
+            <li><a href="" class="download-file dropdown-item" data-row-index="2"><i class="fas fa-download"></i> Download</a></li>
+            <li class="dropdown-divider mt-4"></li>
+            <li><a href="#" class="dropdown-item text-danger" data-row-index="2"><i class="fas fa-trash"></i> Delete</a></li>
+          </ul>
+        </div>
+      </td>
+      <td><%=File.size("#{@dir}/#{dir}")%> Bytes</td>
+      <td><%=File.mtime("#{@dir}/#{dir}")%></td>
+    </tr>
+
+  </tbody>
+<% end %>
+</table>
