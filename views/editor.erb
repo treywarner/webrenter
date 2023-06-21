@@ -1,0 +1,91 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title><%= title %></title>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="<%= url('/styles.css') %>">
+
+  <style type="text/css" media="screen">
+    #editor { 
+        height: 90.8%; 
+        width: 100%
+    }
+
+    html, body {
+        height: 100%
+    }
+</style>
+
+</head>
+<body>
+
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a href="/" class="navbar-brand"><%= ENV["ONDEMAND_TITLE"] %></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a href="<%= url("/") %>" class="nav-link">
+            <i class="fas fa-home"></i> <%= title %>
+          </a>
+        </li>
+
+        <% if session[:login] %>
+        <li class="nav-item active">
+          <a href="<%= url('/projects_view') %>" class="nav-link">
+            <i class="fas fa-camera"></i> Projects
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="<%= url('/projects/new') %>" class="nav-link">
+            <i class="fas fa-camera"></i> New Project
+          </a>
+        </li>
+        <% end %>
+        <% if not session[:login] %>
+        <li class="nav-item active">
+          <a href="<%= url('/login') %>" class="nav-link">
+            <i class="fas fa-right-to-bracket"></i> Log in
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="<%= url('/signup') %>" class="nav-link">
+            <i class="fas fa-right-to-bracket"></i> Sign up
+          </a>
+        </li>
+        <% end %>
+        <% if session[:login] %>
+        <li class="nav-item active">
+          <a href="<%= url('/logoff') %>" class="nav-link">
+            <i class="fas fa-right-to-bracket"></i> Log off
+          </a>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+
+<pre id="editor"><%= @value %></pre>
+    
+<script src="<%=url('/ace/ace.js')%>"></script>
+<script src="<%=url('/editor.js')%>"></script>
+<script>
+    
+</script>
+
+</body>
+</html>

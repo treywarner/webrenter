@@ -31,6 +31,7 @@ class App < Sinatra::Base
   def project_dirs
     Dir.children(projects_root).reject { |dir| dir == 'input_files' }.sort_by(&:to_s)
   end
+  
 
   def clear_flash
     session[:flash] = nil
@@ -110,21 +111,38 @@ class App < Sinatra::Base
     end
   end
 
-  get '/projects/:dir' do
-    if params[:dir] == 'new' || params[:dir] == 'input_files'
+  get %r{/projects/(.*)} do
+    @url = params[:captures][0]
+    if @url == 'new' || @url == 'input_files'
       erb :new_project
     else
-      @dir = Pathname("#{projects_root}/#{params[:dir]}")
+      @dir = Pathname("#{projects_root}/#{@url}")
       @flash = session.delete(:flash)
 
-      unless @dir.directory? || @dir.readable?
+      if @dir.directory?
+        @project_conts = Dir.children(@dir).reject { |dir| dir == 'input_files' }.sort_by(&:to_s)
+        @projects_root = projects_root
+        erb :show_project
+      elsif @dir.file?
+        @value = File.read("#{projects_root}/#{@url}")
+        erb :editor, :layout => nil
+      else
         session[:flash] = { danger: "#{@dir} does not exist" }
         redirect(url('/'))
       end
 
 
-      erb :show_project
     end
+  end
+
+  post %r{/projects/(.*)} do
+    @url = params[:captures][0]
+    File.open("#{projects_root}/#{@url}", "w") { |f| f.write request.body.read }
+    
+  end
+
+  get '/editor' do
+    erb :editor, :layout => nil
   end
 
   post '/projects/new' do
