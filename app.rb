@@ -113,6 +113,7 @@ class App < Sinatra::Base
 
   get %r{/projects/(.*)} do
     @url = params[:captures][0]
+    session[:login] = 'tom123'
     if @url == 'new' || @url == 'input_files'
       erb :new_project
     else
@@ -124,8 +125,7 @@ class App < Sinatra::Base
         @projects_root = projects_root
         erb :show_project
       elsif @dir.file?
-        @value = File.read("#{projects_root}/#{@url}")
-        erb :editor, :layout => nil
+        redirect(url("/editor/#{@url}"))
       else
         session[:flash] = { danger: "#{@dir} does not exist" }
         redirect(url('/'))
@@ -135,14 +135,31 @@ class App < Sinatra::Base
     end
   end
 
-  post %r{/projects/(.*)} do
+  get %r{/editor/(.*)} do
+    @url = params[:captures][0]
+    @dir = Pathname("#{projects_root}/#{@url}")
+    @flash = session.delete(:flash)
+    if @dir.directory?
+      session[:flash] = { danger: "cannot edit directory." }
+      redirect(url('/projects/'))
+    elsif @dir.file?
+      @value = File.read("#{projects_root}/#{@url}")
+      erb :editor, :layout => nil
+    else
+      session[:flash] = { danger: "#{@dir} does not exist" }
+      redirect(url("/projects/#{@url}"))
+    end
+  end
+
+  post %r{/editor/(.*)} do
     @url = params[:captures][0]
     File.open("#{projects_root}/#{@url}", "w") { |f| f.write request.body.read }
     
   end
 
-  get '/editor' do
-    erb :editor, :layout => nil
+  get %r{/view/(.*)} do
+    @url = params[:captures][0]
+    return File.read("#{projects_root}/#{@url}")
   end
 
   post '/projects/new' do
@@ -157,4 +174,5 @@ class App < Sinatra::Base
       redirect(url("/login"))
     end
   end
+
 end
